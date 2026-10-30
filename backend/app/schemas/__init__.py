@@ -7,6 +7,11 @@ from app.schemas.ai import (
     AIVisionResponse,
     DEFAULT_VISION_PROMPT,
 )
+from app.schemas.vision import (
+    DescribeResponse,
+    ReadTextRequest,
+    ReadTextResponse,
+)
 
 __all__ = [
     "HealthResponse",
@@ -16,4 +21,7 @@ __all__ = [
     "AIVisionRequest",
     "AIVisionResponse",
     "DEFAULT_VISION_PROMPT",
+    "DescribeResponse",
+    "ReadTextRequest",
+    "ReadTextResponse",
 ]

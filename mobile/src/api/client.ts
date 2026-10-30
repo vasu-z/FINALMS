@@ -34,6 +34,15 @@ export interface AIVisionResponse {
   extracted_text?: string;
 }
 
+export interface ReadTextOcrResponse {
+  text: string;
+  mode: string;
+  confidence: number;
+  has_math?: boolean;
+  reading_order_blocks?: string[];
+  model?: string;
+}
+
 export interface DetectedObject {
   label: string;
   relative_position?: string;
@@ -422,6 +431,51 @@ export async function analyzeSceneAssist(
       throw error;
     }
     throw new Error(error.message || "Failed to analyze scene with Gemma 4.");
+  }
+}
+
+/**
+ * Transcribe verbatim text, notes, equations and symbols via the Vision OCR endpoint.
+ * Supports "fast", "balanced", and "accurate" modes (from vasu-z/Hacktoberfest & MinerU).
+ */
+export async function readTextOcr(
+  imageBase64: string,
+  mode: "fast" | "balanced" | "accurate" = "balanced",
+  mimeType: string = "image/jpeg",
+  signal?: AbortSignal
+): Promise<ReadTextOcrResponse> {
+  const baseUrl = getBackendBaseUrl();
+  const url = `${baseUrl}/api/v1/vision/read-text-json`;
+
+  const payload = {
+    image_base64: imageBase64,
+    mode,
+    mime_type: mimeType,
+  };
+
+  try {
+    const response = await fetchWithTimeout(
+      url,
+      {
+        method: "POST",
+        body: JSON.stringify(payload),
+      },
+      25000,
+      signal
+    );
+
+    const data = await response.json();
+    if (!response.ok) {
+      const detail = data?.detail || `HTTP ${response.status}`;
+      throw new Error(detail);
+    }
+
+    return data as ReadTextOcrResponse;
+  } catch (error: any) {
+    if (error.name === "AbortError") {
+      throw error;
+    }
+    throw new Error(error.message || "Failed to read text and notes with OCR.");
   }
 }
 

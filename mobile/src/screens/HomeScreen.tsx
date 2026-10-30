@@ -13,6 +13,7 @@ import { readingPipeline } from "../services/readingPipeline";
 import { checkBackendHealth, getAiStatus } from "../api/client";
 import { NextClassResult, getNextClass } from "../utils/dateTimeReasoning";
 import { NavigationRoute } from "../navigation/campusRouter";
+import { SaarthiLogo } from "../components/SaarthiLogo";
 
 // Shared Corner Geometry Constants
 const OUTER_CORNER_RADIUS = 28;
@@ -126,7 +127,7 @@ const CornerTile: React.FC<CornerTileProps> = ({
 
 export interface HomeScreenProps {
   onNavigate: (
-    screen: "home" | "reader" | "results" | "timetable" | "navigation" | "voice" | "settings" | "assist",
+    screen: "home" | "reader" | "results" | "timetable" | "navigation" | "voice" | "settings" | "assist" | "ocr_reader",
     params?: any
   ) => void;
   activeRoute: NavigationRoute | null;
@@ -223,6 +224,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   const handleCampusNavigation = async () => {
     await hapticsService.triggerTopRight();
     onNavigate("navigation");
+  };
+
+  const handleOcrReader = async () => {
+    await hapticsService.triggerBottomLeft();
+    onNavigate("ocr_reader");
   };
 
   const handleMyTimetable = async () => {
@@ -402,33 +408,32 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
       {/* 3. Main 4-Panel Framing Area (Top Tiles, Center Branding, Bottom Tiles) */}
       <View style={styles.mainFramingContainer}>
-        {/* Top Row: Read Anything (Left) & Campus Map (Right) */}
+        {/* Top Row: See the World (Left) & Find My Way (Right) */}
         <View style={styles.tilesRow}>
           <CornerTile
             position="topLeft"
-            icon="camera"
-            line1="Read"
-            line2="Anything"
+            icon="eye"
+            line1="See the"
+            line2="World"
             onPress={handleReadCampusText}
-            accessibilityLabel="Read Anything. Top-left corner. Double-tap to open camera and read text, door signs, notice boards, or class timetables."
-            accessibilityHint="Opens camera reader with automatic text and timetable extraction"
+            accessibilityLabel="See the World. Top-left corner. Double-tap to open camera and inspect surroundings, read signs, and explore your environment."
+            accessibilityHint="Opens live vision camera to see and explore surroundings"
           />
 
           <CornerTile
             position="topRight"
             icon="navigate"
-            line1="Campus"
-            line2="Map"
+            line1="Find"
+            line2="My Way"
             onPress={handleCampusNavigation}
-            accessibilityLabel="Campus Map. Top-right corner. Double-tap to open interactive campus map, live GPS location, destination search, and walking navigation."
+            accessibilityLabel="Find My Way. Top-right corner. Double-tap to open interactive campus map, live GPS location, destination search, and walking navigation."
             accessibilityHint="Opens interactive campus map and real-time navigation"
           />
         </View>
 
-        {/* Center Section: SAARTHI Campus Mode Branding & Honest Voice State */}
+        {/* Center Section: Beautiful & Meaningful SAARTHI Emblem & Honest Voice State */}
         <View style={styles.centerBrandingSection} accessible={false}>
-          <Text style={styles.brandTitle} accessibilityRole="header">SAARTHI</Text>
-          <Text style={styles.brandSubtitle}>CAMPUS MODE</Text>
+          <SaarthiLogo size="medium" showTagline={true} />
 
           {/* Audio Indicator: Real state only (never fake wave when inactive) */}
           <Pressable
@@ -471,20 +476,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           )}
         </View>
 
-        {/* Bottom Row: My Day (Left) & Talk to Saarthi (Right) */}
+        {/* Bottom Row: Read Anything (Left) & Talk to Saarthi (Right) */}
         <View style={styles.tilesRow}>
           <CornerTile
             position="bottomLeft"
-            icon="calendar"
-            line1="My"
-            line2="Day"
-            onPress={handleMyTimetable}
-            accessibilityLabel={
-              nextClass && nextClass.entry
-                ? `My Day. Bottom-left corner. Next confirmed class is ${nextClass.entry.courseName} at ${nextClass.entry.startTime} in ${nextClass.entry.room}. Double-tap to view confirmed schedule.`
-                : "My Day. Bottom-left corner. No confirmed classes scheduled right now. Double-tap to view and manage confirmed schedule."
-            }
-            accessibilityHint="Opens confirmed daily schedule and next class information"
+            icon="document-text"
+            line1="Read"
+            line2="Anything"
+            onPress={handleOcrReader}
+            accessibilityLabel="Read Anything. Bottom-left corner. Double-tap to scan and read lecture notes, handwriting, equations, and documents verbatim."
+            accessibilityHint="Opens live OCR reader for notes, handwriting, and printed documents"
           />
 
           <CornerTile

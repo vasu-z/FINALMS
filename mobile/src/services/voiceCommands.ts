@@ -15,7 +15,8 @@ export type NavigationIntentType =
   | "open_navigation"
   | "open_voice"
   | "open_settings"
-  | "open_assist";
+  | "open_assist"
+  | "open_ocr_reader";
 
 export type VoiceIntentType =
   | "read_this"
@@ -53,6 +54,7 @@ export const SCREEN_INTENT_MAP: Record<NavigationIntentType, AppScreen> = {
   open_voice: "voice",
   open_settings: "settings",
   open_assist: "assist",
+  open_ocr_reader: "ocr_reader",
 };
 
 export interface ParsedVoiceCommand {
@@ -384,11 +386,13 @@ export function parseVoiceCommand(transcript: string): ParsedVoiceCommand {
     };
   }
 
-  // 6b. OPEN CAMPUS READER / SCAN / READ ANYTHING
+  // 6b. OPEN SEE THE WORLD (Camera View & Signs)
   if (
-    cleaned === "read anything" ||
-    cleaned === "open read anything" ||
-    cleaned === "read text" ||
+    cleaned === "see the world" ||
+    cleaned === "open see the world" ||
+    cleaned === "see world" ||
+    cleaned === "see" ||
+    cleaned === "look around" ||
     cleaned === "read campus text" ||
     cleaned === "open campus reader" ||
     cleaned === "open reader" ||
@@ -427,6 +431,35 @@ export function parseVoiceCommand(transcript: string): ParsedVoiceCommand {
       intent: "open_results",
       rawTranscript: transcript,
       targetScreen: "results",
+      confidence: 0.98,
+    };
+  }
+
+  // 6c-2. OPEN READ ANYTHING (High-Fidelity OCR for Notes & Equations)
+  if (
+    cleaned === "read anything" ||
+    cleaned === "open read anything" ||
+    cleaned === "read text" ||
+    cleaned === "ocr reader" ||
+    cleaned === "open ocr reader" ||
+    cleaned === "open ocr" ||
+    cleaned === "ocr" ||
+    cleaned === "read notes" ||
+    cleaned === "open read notes" ||
+    cleaned === "read document" ||
+    cleaned === "open read document" ||
+    cleaned === "read notes and formulas" ||
+    cleaned === "transcribe notes" ||
+    cleaned === "notes reader" ||
+    cleaned === "go to ocr reader" ||
+    cleaned === "go to notes reader" ||
+    cleaned === "open lecture notes" ||
+    cleaned === "read formulas"
+  ) {
+    return {
+      intent: "open_ocr_reader",
+      rawTranscript: transcript,
+      targetScreen: "ocr_reader",
       confidence: 0.98,
     };
   }
@@ -471,8 +504,11 @@ export function parseVoiceCommand(transcript: string): ParsedVoiceCommand {
     };
   }
 
-  // 6e. OPEN NAVIGATION / CAMPUS MAP
+  // 6e. OPEN NAVIGATION / FIND MY WAY / CAMPUS MAP
   if (
+    cleaned === "find my way" ||
+    cleaned === "open find my way" ||
+    cleaned === "find way" ||
     cleaned === "campus map" ||
     cleaned === "open campus map" ||
     cleaned === "map" ||

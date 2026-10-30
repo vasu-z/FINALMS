@@ -1218,7 +1218,7 @@ export const CampusNavigationScreen: React.FC<CampusNavigationScreenProps> = ({
         </Pressable>
 
         <Text style={styles.headerTitle} accessibilityRole="header">
-          Campus Map & GPS
+          Find My Way
         </Text>
 
         <View style={styles.headerRightActions}>

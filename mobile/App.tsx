@@ -38,6 +38,7 @@ import {
 import { VoiceAssistantScreen } from "./src/screens/VoiceAssistantScreen";
 import { SettingsScreen } from "./src/screens/SettingsScreen";
 import { CameraAssistScreen } from "./src/screens/CameraAssistScreen";
+import { OcrReaderScreen } from "./src/screens/OcrReaderScreen";
 import { globalVoiceService } from "./src/services/globalVoiceService";
 import { GlobalVoiceControl } from "./src/components/GlobalVoiceControl";
 import { voiceRecognitionService } from "./src/services/voiceRecognition";
@@ -65,11 +66,12 @@ export type AppScreen =
   | "navigation"
   | "voice"
   | "settings"
-  | "assist";
+  | "assist"
+  | "ocr_reader";
 
 const ONBOARDING_KEY = "@saarthi_onboarding_played";
 const HOME_VOICE_GUIDANCE =
-  "Welcome to SAARTHI! While the app is open on Home, say Hey Saarthi to activate voice control. Then choose Read Anything, Campus Map, My Day, or Talk to Saarthi. You can also tap the purple Talk to Saarthi tile.";
+  "Welcome to SAARTHI! While the app is open on Home, say Hey Saarthi to activate voice control. Then choose See the World, Find My Way, Read Anything, or Talk to Saarthi. You can also tap the purple Talk to Saarthi tile.";
 
 export function SaarthiApp() {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>("home");
@@ -844,6 +846,14 @@ export function SaarthiApp() {
 
       {currentScreen === "assist" && (
         <CameraAssistScreen
+          onNavigateBack={handleGoBack}
+          permissionResponse={cameraPermission}
+          onRequestPermission={requestCameraPermission}
+        />
+      )}
+
+      {currentScreen === "ocr_reader" && (
+        <OcrReaderScreen
           onNavigateBack={handleGoBack}
           permissionResponse={cameraPermission}
           onRequestPermission={requestCameraPermission}

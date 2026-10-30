@@ -18,6 +18,7 @@ describe("screenRegistry — Screen Awareness Registry", () => {
     "voice",
     "settings",
     "assist",
+    "ocr_reader",
   ];
 
   it("contains an entry for every valid AppScreen without missing definitions", () => {
@@ -58,8 +59,8 @@ describe("screenRegistry — Screen Awareness Registry", () => {
     const timetableDesc = describeWhereAmI("timetable");
 
     expect(homeDesc).toContain("Home");
-    expect(readerDesc).toContain("Reader");
-    expect(navDesc).toContain("Navigation");
+    expect(readerDesc).toContain("See the World");
+    expect(navDesc).toContain("Find My Way");
     expect(timetableDesc).toContain("Timetable");
     expect(homeDesc).not.toEqual(readerDesc);
     expect(homeDesc).not.toEqual(navDesc);

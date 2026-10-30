@@ -21,24 +21,24 @@ export const SCREEN_REGISTRY: Record<AppScreen, ScreenRegistryEntry> = {
   home: {
     screen: "home",
     screenName: "Home",
-    purpose: "Main campus launchpad with four tactile corner panels.",
+    purpose: "Main launchpad with four tactile corner panels.",
     availableActions: [
-      "Open Campus Reader to scan text and signs",
-      "Open Campus Navigation for accessible routes",
-      "Open My Timetable to manage your schedule",
+      "Open See the World to inspect surroundings and signs",
+      "Open Find My Way for accessible routes",
+      "Open Read Anything to scan lecture notes and documents",
       "Open Voice Assistant to ask questions",
       "Check backend connection and AI status",
       "Open Settings",
     ],
     whereAmI: "You are on the Home screen. This is the main campus menu.",
     whatCanIDo:
-      "From the Home screen, you can open Campus Reader to scan text and signs, open Campus Navigation for accessible routes, check your Timetable, open the Voice Assistant, or open Settings.",
+      "From the Home screen, you can open See the World to inspect surroundings, open Find My Way for accessible routes, open Read Anything for lecture notes, open the Voice Assistant, or open Settings.",
   },
 
   reader: {
     screen: "reader",
-    screenName: "Campus Reader",
-    purpose: "Real-time camera scanner for door plaques, schedules, notices, and surroundings.",
+    screenName: "See the World",
+    purpose: "Real-time camera view to inspect surroundings, door plaques, and signs.",
     availableActions: [
       "Say 'scan now' or tap the screen to take a scan",
       "Scan in Auto Read mode for general printed text",
@@ -50,7 +50,7 @@ export const SCREEN_REGISTRY: Record<AppScreen, ScreenRegistryEntry> = {
       "Say 'go home' to return to the Home screen",
     ],
     whereAmI:
-      "You are on the Campus Reader screen. Point your camera at text or signs to scan.",
+      "You are on the See the World screen. Point your camera forward to explore.",
     whatCanIDo:
       "You can say 'scan now' or tap to capture, say 'describe surroundings', listen to instructions, or say 'go home'.",
   },
@@ -94,8 +94,8 @@ export const SCREEN_REGISTRY: Record<AppScreen, ScreenRegistryEntry> = {
 
   navigation: {
     screen: "navigation",
-    screenName: "Campus Navigation",
-    purpose: "Accessible indoor turn-by-turn guidance between campus rooms and landmarks.",
+    screenName: "Find My Way",
+    purpose: "Accessible turn-by-turn guidance between campus rooms and landmarks.",
     availableActions: [
       "Search for a destination landmark or room",
       "Calculate an accessible route",
@@ -106,7 +106,7 @@ export const SCREEN_REGISTRY: Record<AppScreen, ScreenRegistryEntry> = {
       "Return to the Home screen",
     ],
     whereAmI:
-      "You are on the Campus Navigation screen for turn-by-turn campus routing.",
+      "You are on the Find My Way screen for turn-by-turn routing.",
     whatCanIDo:
       "You can search for a campus destination, calculate an accessible route avoiding stairs, advance or repeat route steps, cancel navigation, or return home.",
   },
@@ -163,6 +163,24 @@ export const SCREEN_REGISTRY: Record<AppScreen, ScreenRegistryEntry> = {
       "You are on the Live Camera Assist screen. Camera preview is streaming to Gemma 4.",
     whatCanIDo:
       "You can tap Describe Now or say 'What is ahead' to inspect what is in front of you, toggle live streaming, say 'Stop' to silence audio, or return home.",
+  },
+
+  ocr_reader: {
+    screen: "ocr_reader",
+    screenName: "Read Anything",
+    purpose: "Live verbatim reading of lecture notes, handwriting, equations, and documents.",
+    availableActions: [
+      "Say 'scan now' or tap the screen to transcribe notes",
+      "Switch between Fast, Balanced, and Accurate OCR modes",
+      "Transcribe mathematical formulas and symbols",
+      "Copy transcribed text to clipboard",
+      "Re-read recognized text aloud",
+      "Return to the Home screen",
+    ],
+    whereAmI:
+      "You are on the Read Anything screen. Point your camera at lecture notes, handwritten formulas, or documents.",
+    whatCanIDo:
+      "You can say 'scan now' or tap to transcribe notes, switch between Fast, Balanced, and Accurate modes, copy the transcribed text, or return home.",
   },
 };
 

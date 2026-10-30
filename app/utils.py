@@ -163,7 +163,10 @@ class Console:
             print(line)
         except UnicodeEncodeError:
             # Fallback for systems with poor unicode support
-            print(f"[LOG] {message} {details}")
+            encoding = sys.stdout.encoding or 'ascii'
+            safe_msg = message.encode(encoding, errors='replace').decode(encoding)
+            safe_details = details.encode(encoding, errors='replace').decode(encoding) if details else ''
+            print(f"[LOG] {safe_msg} {safe_details}".strip())
 
     @classmethod
     def detection(cls, priority: str, scene: str, distance: float, speech: str, 

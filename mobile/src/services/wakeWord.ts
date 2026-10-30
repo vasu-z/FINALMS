@@ -51,4 +51,4 @@ export function isSaarthiWakeTranscript(transcript: string): boolean {
 }
 
 export const WAKE_WORD_GREETING =
-  "I’m listening. Say Read Anything, Campus Map, My Day, or Talk to Saarthi.";
+  "I’m listening. Say See the World, Find My Way, Read Anything, or Talk to Saarthi.";

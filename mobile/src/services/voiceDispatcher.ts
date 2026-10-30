@@ -268,7 +268,8 @@ export async function dispatchVoiceCommand(
     case "open_navigation":
     case "open_voice":
     case "open_settings":
-    case "open_assist": {
+    case "open_assist":
+    case "open_ocr_reader": {
       const targetScreen: AppScreen =
         parsed.targetScreen ||
         SCREEN_INTENT_MAP[parsed.intent as NavigationIntentType] ||

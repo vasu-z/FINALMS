@@ -39,15 +39,15 @@ describe("voiceDispatcher — Dynamic Screen-Aware & Navigation Command Executio
       const readerRes = await dispatchVoiceCommand("Where am I?", {
         currentScreen: "reader",
       });
-      expect(readerRes).toContain("Campus Reader");
-      expect(speakSpy).toHaveBeenCalledWith(expect.stringContaining("Campus Reader"), {
+      expect(readerRes).toContain("See the World");
+      expect(speakSpy).toHaveBeenCalledWith(expect.stringContaining("See the World"), {
         force: true,
       });
 
       const navRes = await dispatchVoiceCommand("Where am I?", {
         currentScreen: "navigation",
       });
-      expect(navRes).toContain("Campus Navigation");
+      expect(navRes).toContain("Find My Way");
       expect(readerRes).not.toEqual(navRes);
 
       const homeRes = await dispatchVoiceCommand("Where am I?", {
@@ -107,16 +107,16 @@ describe("voiceDispatcher — Dynamic Screen-Aware & Navigation Command Executio
         onNavigateToScreen: onNavScreen,
       });
 
-      expect(res).toBe("Opening Campus Reader.");
+      expect(res).toBe("Opening See the World.");
       expect(onNavScreen).toHaveBeenCalledWith("reader");
-      expect(speakSpy).toHaveBeenCalledWith("Opening Campus Reader.", { force: true });
+      expect(speakSpy).toHaveBeenCalledWith("Opening See the World.", { force: true });
 
       // Regression: "open reader"
       const res2 = await dispatchVoiceCommand("open reader", {
         currentScreen: "home",
         onNavigateToScreen: onNavScreen,
       });
-      expect(res2).toBe("Opening Campus Reader.");
+      expect(res2).toBe("Opening See the World.");
       expect(onNavScreen).toHaveBeenCalledWith("reader");
     });
 
@@ -153,14 +153,14 @@ describe("voiceDispatcher — Dynamic Screen-Aware & Navigation Command Executio
         currentScreen: "home",
         onNavigateToScreen: onNavScreen,
       });
-      expect(res1).toBe("Opening Campus Navigation.");
+      expect(res1).toBe("Opening Find My Way.");
       expect(onNavScreen).toHaveBeenCalledWith("navigation");
 
       const res2 = await dispatchVoiceCommand("Find a Room", {
         currentScreen: "home",
         onNavigateToScreen: onNavScreen,
       });
-      expect(res2).toBe("Opening Campus Navigation.");
+      expect(res2).toBe("Opening Find My Way.");
       expect(onNavScreen).toHaveBeenCalledWith("navigation");
     });
 
@@ -267,7 +267,7 @@ describe("voiceDispatcher — Dynamic Screen-Aware & Navigation Command Executio
       });
 
       expect(onNavBack).toHaveBeenCalled();
-      expect(res).toBe("Returning to Campus Reader.");
+      expect(res).toBe("Returning to See the World.");
     });
 
     it("safely explains when history is empty and user is already on Home", async () => {

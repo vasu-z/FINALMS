@@ -94,11 +94,13 @@ describe("voiceCommands — Deterministic Intent Parsing", () => {
       expect(parseVoiceCommand("take me home").intent).toBe("open_home");
     });
 
-    it("recognizes 'Open Campus Reader' / 'Open Reader' / 'Scan' aliases", () => {
+    it("recognizes 'Open Campus Reader' / 'Open Reader' / 'Scan' / 'See the World' aliases", () => {
       const res1 = parseVoiceCommand("Open Campus Reader");
       expect(res1.intent).toBe("open_reader");
       expect(res1.targetScreen).toBe("reader");
 
+      expect(parseVoiceCommand("See the World").intent).toBe("open_reader");
+      expect(parseVoiceCommand("open see the world").intent).toBe("open_reader");
       expect(parseVoiceCommand("Open Reader").intent).toBe("open_reader");
       expect(parseVoiceCommand("Scan").intent).toBe("open_reader");
       expect(parseVoiceCommand("start scanning").intent).toBe("open_reader");
@@ -160,11 +162,13 @@ describe("voiceCommands — Deterministic Intent Parsing", () => {
       expect(parseVoiceCommand("Show My Time Table...").intent).toBe("open_timetable");
     });
 
-    it("recognizes 'Open Navigation' / 'Navigate' / 'Find a Room' aliases", () => {
+    it("recognizes 'Open Navigation' / 'Navigate' / 'Find a Room' / 'Find My Way' aliases", () => {
       const res1 = parseVoiceCommand("Open Navigation");
       expect(res1.intent).toBe("open_navigation");
       expect(res1.targetScreen).toBe("navigation");
 
+      expect(parseVoiceCommand("Find My Way").intent).toBe("open_navigation");
+      expect(parseVoiceCommand("open find my way").intent).toBe("open_navigation");
       expect(parseVoiceCommand("Navigate").intent).toBe("open_navigation");
       expect(parseVoiceCommand("Find a Room").intent).toBe("open_navigation");
       expect(parseVoiceCommand("campus navigation").intent).toBe("open_navigation");
@@ -215,11 +219,22 @@ describe("voiceCommands — Deterministic Intent Parsing", () => {
         open_voice: "voice",
         open_settings: "settings",
         open_assist: "assist",
+        open_ocr_reader: "ocr_reader",
       };
 
       Object.entries(expectedMapping).forEach(([intent, screenId]) => {
         expect(SCREEN_INTENT_MAP[intent as NavigationIntentType]).toBe(screenId);
       });
+    });
+
+    it("parses OCR reader / Read Anything voice commands correctly", () => {
+      expect(parseVoiceCommand("Read Anything").intent).toBe("open_ocr_reader");
+      expect(parseVoiceCommand("open read anything").intent).toBe("open_ocr_reader");
+      expect(parseVoiceCommand("OCR Reader").intent).toBe("open_ocr_reader");
+      expect(parseVoiceCommand("read notes").intent).toBe("open_ocr_reader");
+      expect(parseVoiceCommand("transcribe notes").intent).toBe("open_ocr_reader");
+      expect(parseVoiceCommand("read document").intent).toBe("open_ocr_reader");
+      expect(parseVoiceCommand("open ocr reader").targetScreen).toBe("ocr_reader");
     });
   });
 

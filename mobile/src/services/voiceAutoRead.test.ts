@@ -52,7 +52,7 @@ describe("Voice-First Campus Mode Auto Read & Results Suite", () => {
     it("provides clear camera positioning and scan initiation guidance", () => {
       const readerRegistry = SCREEN_REGISTRY.reader;
       expect(readerRegistry.whatCanIDo.toLowerCase()).toContain("scan now");
-      expect(readerRegistry.whereAmI.toLowerCase()).toContain("campus reader");
+      expect(readerRegistry.whereAmI.toLowerCase()).toContain("see the world");
     });
 
     it("enables voice mode with custom Auto Read startup guidance without competing listeners", async () => {

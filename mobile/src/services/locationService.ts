@@ -11,7 +11,44 @@
  * - Full cleanup: Cleans up watchPositionAsync subscriptions on stop and unmount.
  */
 
-import * as Location from "expo-location";
+import type * as LocationTypes from "expo-location";
+
+function hasNativeModule(name: string): boolean {
+  try {
+    const g = globalThis as any;
+    if (g?.expo?.modules?.[name]) return true;
+    if (g?.nativeModuleProxy?.[name]) return true;
+    if (g?.__turboModuleProxy && g.__turboModuleProxy(name)) return true;
+  } catch {
+    // Safe ignore
+  }
+  return false;
+}
+
+let LocationModule: any = null;
+if (process.env.NODE_ENV === "test" || hasNativeModule("ExpoLocation")) {
+  try {
+    LocationModule = require("expo-location");
+  } catch {
+    LocationModule = null;
+  }
+}
+
+const Location: any = LocationModule;
+type LocationSubscription = { remove: () => void };
+const Accuracy = Location?.Accuracy ?? {
+  Lowest: 1,
+  Low: 2,
+  Balanced: 3,
+  High: 4,
+  Highest: 5,
+  BestForNavigation: 6,
+};
+const PermissionStatus = Location?.PermissionStatus ?? {
+  GRANTED: "granted",
+  DENIED: "denied",
+  UNDETERMINED: "undetermined",
+};
 
 export type GpsAccuracyLevel = "excellent" | "good" | "moderate" | "poor" | "unusable" | "lost";
 
@@ -59,7 +96,7 @@ export const CU_CAMPUS_VIEWPORT_CENTER = {
 };
 
 export class LocationService {
-  private subscription: Location.LocationSubscription | null = null;
+  private subscription: LocationSubscription | null = null;
   private lastLocation: RealGpsLocation | null = null;
   private locationListeners: Set<LocationCallback> = new Set();
   private diagnosticsListeners: Set<DiagnosticsCallback> = new Set();
@@ -108,12 +145,12 @@ export class LocationService {
       }
 
       const { status, canAskAgain } = await Location.getForegroundPermissionsAsync();
-      if (status === Location.PermissionStatus.GRANTED) {
+      if (status === PermissionStatus.GRANTED) {
         return { granted: true, canAskAgain, servicesEnabled: true };
       }
 
       const requested = await Location.requestForegroundPermissionsAsync();
-      const granted = requested.status === Location.PermissionStatus.GRANTED;
+      const granted = requested.status === PermissionStatus.GRANTED;
 
       return {
         granted,
@@ -143,7 +180,7 @@ export class LocationService {
 
     try {
       const pos = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
+        accuracy: Accuracy.High,
         timeInterval: 1000,
       });
 
@@ -188,11 +225,11 @@ export class LocationService {
     try {
       this.subscription = await Location.watchPositionAsync(
         {
-          accuracy: Location.Accuracy.BestForNavigation,
+          accuracy: Accuracy.BestForNavigation,
           timeInterval: 1500, // 1.5 seconds between fixes
           distanceInterval: 2, // 2 meters movement threshold
         },
-        (pos) => {
+        (pos: LocationTypes.LocationObject) => {
           const fix = this.transformExpoPosition(pos);
           this.lastLocation = fix;
           this.fixCount++;
@@ -269,7 +306,7 @@ export class LocationService {
     };
   }
 
-  private transformExpoPosition(pos: Location.LocationObject): RealGpsLocation {
+  private transformExpoPosition(pos: LocationTypes.LocationObject): RealGpsLocation {
     const acc = pos.coords.accuracy ?? 99.0;
     const isStale = Math.abs(Date.now() - pos.timestamp) > 30000;
     return {
